@@ -43,10 +43,10 @@ class Ball {
         this.width = width;
         this.height = height;
         this.xSpeed = 1;
-        this.ySpeed = 1;
+        this.ySpeed = 1 ;
 
-        this.xDir = 1;
-        this.yDir = 1;
+        this.xDir = 1.5;
+        this.yDir = 1.5;
     }
     draw(){
         c.fillStyle = "white";
@@ -82,21 +82,18 @@ function update(){
         ball.draw();
         ball.move();
     });
-    checkPlayerCollisions(balls[0], players);
-    checkWallCollisions(balls[0], walls);
+    checkCollisions(balls[0], players, "playerCollision");
+    checkCollisions(balls[0], walls, "ballWallCollision");
+
+    checkCollisions(players[0], walls, "playerWallCollision");
     
     keyboardInputs()
     requestAnimationFrame(update);
 }
 update();
 
-instantiateBall();
-function instantiateBall(){
-    
-}
-
 function refrech(){
-    c.fillStyle = "black"
+    c.fillStyle = "rgba(0, 0, 0, 0.3)"
     c.fillRect(0, 0, canvas.width, canvas.height);
 }
 
@@ -126,24 +123,31 @@ function keyboardInputs(){
     }
 }
 
-function checkWallCollisions(ob, arr){
-    for (let i = 0; i < arr.length; i++) {
-        //x collision
-        if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x){
-            ob.xDir *= -1;
-        }
-        //y collision
-        if(ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y){
-            ob.yDir *= -1;
-        }
-    }   
-}
-function checkPlayerCollisions(ob, arr){
-    for (let i = 0; i < arr.length; i++) {        
-        //x collision
-        if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x + arr[i].width && ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y + arr[i].height){
-            //y collision
-            ob.xDir *= -1;
-        }
-    }   
+function checkCollisions(ob, arr, type){
+    switch (type) {
+        case "ballWallCollision":
+            for (let i = 0; i < arr.length; i++) {
+                //x collision
+                if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x){
+                    ob.xDir *= -1;
+                }
+                //y collision
+                if(ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y){
+                    ob.yDir *= -1;
+                }
+            } 
+            break;
+        case "playerCollision":
+            for (let i = 0; i < arr.length; i++) {        
+                //x collision
+                if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x + arr[i].width && ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y + arr[i].height){
+                    ob.xDir *= -1;
+                }
+            } 
+            break;
+        case "playerWallCollision":
+
+            break;
+    }
+      
 }
