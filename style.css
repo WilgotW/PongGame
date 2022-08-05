@@ -1,0 +1,11 @@
+body{
+    background: black;
+    padding: 0;
+    margin: 0;
+}
+canvas{
+    margin: 0;
+    padding: 0;
+    background: black;
+    position: absolute;
+}
