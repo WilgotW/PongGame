@@ -1,12 +1,18 @@
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-window.addEventListener('resize', function(){
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-});
+canvas.width = 825;
+canvas.height = 650;
+
+const gameWindow = document.getElementsByClassName("GameWindow");
+
+const player1score = document.getElementById("player1Score");
+const player2score = document.getElementById("player2Score");
+
+let player1ScoreText = parseInt(player1score.innerHTML);
+let player2ScoreText = parseInt(player2score.innerHTML);
+
+let spawningBall = false;
 let ballSpeedMultipliar = 1;
 let keys = [];
 let walls = [];
@@ -61,12 +67,7 @@ class Ball {
         this.y += this.ySpeed * this.yDir * ballSpeedMultipliar;
     }
 }
-
-
-// walls.push(new Wall(canvas.width* (1/8), canvas.height * (1/10), canvas.width * (6/8), 2));
-// walls.push(new Wall(canvas.width* (1/8), canvas.height * (5/10) , canvas.width * (6/8), 2));
-balls.push(new Ball(400, 300, 10, 10));
-
+newBall();
 walls.push(new Wall(100, 100, 600, 2));
 walls.push(new Wall(100, 500, 600, 2));
 walls.push(new Wall(100, 100, 2, 400));
@@ -91,12 +92,8 @@ function update(){
         checkCollisions(balls[0], players, "playerBallCollision");
         checkCollisions(balls[0], walls, "ballWallCollision");
     }
-
     checkCollisions(players[0], walls, "playerWallCollision");
     checkCollisions(players[1], walls, "playerWallCollision");
-
-    
-
     keyboardInputs()
     requestAnimationFrame(update);
 }
@@ -117,32 +114,36 @@ document.addEventListener('keyup', function(event){
 function keyboardInputs(){
     //w
     if(keys[87]){
-
         players[0].y -= players[0].upwardsSpeed;
     }
     //s
     if(keys[83]){
         players[0].y += players[0].downwardsSpeed;
     }
-
+    //up
     if(keys[38]){
         players[1].y -= players[1].upwardsSpeed;
     }
+    //down
     if(keys[40]){
         players[1].y += players[1].downwardsSpeed;
     }
 }
-function destroyBall(){
-    balls.splice(0, 1);
+
+function newBall(){
+    spawningBall = true;
+    balls.length != 0 && (balls[0].x > canvas.width/2 ? player1ScoreText += 1 : player2ScoreText += 1 ,balls.splice(0, 1));
+    player1score.innerHTML = player1ScoreText.toString();
+    player2score.innerHTML = player2ScoreText.toString();
     ballSpeedMultipliar = 0;
     balls.push(new Ball(400, 300, 10, 10));
-    setTimeout(newRound, 3000);
+    setTimeout(newRound, 4000);    
 }
 function newRound(){
+    spawningBall = false;
     ballSpeedMultipliar = 1;
-    
     let random = randomNum(-1, 1);
-    if(random == 0){random = 1}
+    if(random == 0){random = -1}
     balls[0].xDir = random;
     random = randomNum(-1, 1);
     if(random == 0){random = 1}
@@ -157,7 +158,8 @@ function checkCollisions(ob, arr, type){
             for (let i = 0; i < arr.length; i++) {
                 //x collision
                 if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x){
-                    destroyBall();
+                    if(!spawningBall){console.log("called"), newBall();}
+                    
                 }else if(ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y){ //y collision
                     ob.yDir *= -1;
                     ballSpeedMultipliar < 1.75 && (ballSpeedMultipliar += 0.01);

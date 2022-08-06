@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pong</title>
+    <title>Pong Game!</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@200&display=swap" rel="stylesheet">
 </head>
 <body>
-    <canvas></canvas>
+    <div class="GameWindow">
+        <div class="ScoreDiv">
+            <div id="player1Score" class="score">0</div>
+            <p> - </p>
+            <div id="player2Score"class="score">0</div>
+        </div>
+        <div class="center">
+            <canvas></canvas>
+        </div>    
+    </div>
     <script src="/script.js"></script>
 </body>
 </html>
