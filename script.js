@@ -4,7 +4,19 @@ const c = canvas.getContext('2d');
 canvas.width = 825;
 canvas.height = 650;
 
-const gameWindow = document.getElementsByClassName("GameWindow");
+const playerVsPlayerBtn = document.getElementById("playerVSplayer");
+playerVsPlayerBtn.addEventListener('click', function(){
+    startGame();
+});
+
+document.getElementById("GameWindow").style.display = "none";
+document.getElementById("GameMenu").style.display = "block";
+function startGame(){
+    document.getElementById("GameMenu").style.display = "none";
+    document.getElementById("GameWindow").style.display = "block";
+    newBall();
+}
+
 
 const player1score = document.getElementById("player1Score");
 const player2score = document.getElementById("player2Score");
@@ -13,7 +25,7 @@ let player1ScoreText = parseInt(player1score.innerHTML);
 let player2ScoreText = parseInt(player2score.innerHTML);
 
 let spawningBall = false;
-let ballSpeedMultipliar = 1;
+let ballSpeedMultipliar = 0.75;
 let keys = [];
 let walls = [];
 let players = [];
@@ -67,7 +79,6 @@ class Ball {
         this.y += this.ySpeed * this.yDir * ballSpeedMultipliar;
     }
 }
-newBall();
 walls.push(new Wall(100, 100, 600, 2));
 walls.push(new Wall(100, 500, 600, 2));
 walls.push(new Wall(100, 100, 2, 400));
@@ -141,7 +152,7 @@ function newBall(){
 }
 function newRound(){
     spawningBall = false;
-    ballSpeedMultipliar = 1;
+    ballSpeedMultipliar = 0.75;
     let random = randomNum(-1, 1);
     if(random == 0){random = -1}
     balls[0].xDir = random;
@@ -167,7 +178,7 @@ function checkCollisions(ob, arr, type){
             } 
             break;
         case "playerBallCollision":
-            for (let i = 0; i < arr.length; i++) {        
+            for (let i = 0; i < arr.length; i++){ 
                 //x collision
                 if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x + arr[i].width && ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y + arr[i].height){
                     ob.xDir *= -1;

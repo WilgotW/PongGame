@@ -8,6 +8,41 @@ canvas{
     padding: 0;
     background: black;
 }
+#GameMenu{
+    position: absolute;
+}
+#logo{
+    margin-top: 10%;
+    width: 20%;
+}
+#title{
+    margin-bottom: 10px;
+    font-family: 'Kanit', sans-serif;
+    font-size: 50px;
+    color: aliceblue;
+    transition: 1s;
+}
+.container{
+    display: grid;
+    grid-template-columns: repeat(1fr, 1);
+    gap: 5px;
+}
+.item{
+    user-select: none;
+    padding: 10px;
+    border: 2px solid white;
+    font-family: 'Kanit', sans-serif;
+    font-size: 20px;
+    color: aliceblue;
+    opacity: 0.6;
+    transition: all .2s ease-in-out; 
+}
+.item:hover{
+    cursor: pointer;
+    opacity: 1;
+    transform: scale(1.1);
+}
+
 .center{
     text-align: center;
     align-items: center;
