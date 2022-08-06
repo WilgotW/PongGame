@@ -30,6 +30,9 @@ class Player {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.upwardsSpeed = 1;
+        this.downwardsSpeed = 1;
+        this.colliding = false;
     }
     draw(){
         c.fillStyle = "white";
@@ -62,6 +65,7 @@ class Ball {
 // walls.push(new Wall(canvas.width* (1/8), canvas.height * (1/10), canvas.width * (6/8), 2));
 // walls.push(new Wall(canvas.width* (1/8), canvas.height * (5/10) , canvas.width * (6/8), 2));
 balls.push(new Ball(400, 300, 10, 10));
+
 walls.push(new Wall(100, 100, 600, 2));
 walls.push(new Wall(100, 500, 600, 2));
 walls.push(new Wall(100, 100, 2, 400));
@@ -82,11 +86,15 @@ function update(){
         ball.draw();
         ball.move();
     });
-    checkCollisions(balls[0], players, "playerCollision");
-    checkCollisions(balls[0], walls, "ballWallCollision");
+    if(balls[0] != undefined){
+        checkCollisions(balls[0], players, "playerBallCollision");
+        checkCollisions(balls[0], walls, "ballWallCollision");
+    }
+    
 
     checkCollisions(players[0], walls, "playerWallCollision");
-    
+    checkCollisions(players[1], walls, "playerWallCollision");
+
     keyboardInputs()
     requestAnimationFrame(update);
 }
@@ -108,36 +116,42 @@ function keyboardInputs(){
     //w
     if(keys[87]){
 
-        players[0].y -= 1
+        players[0].y -= players[0].upwardsSpeed;
     }
     //s
     if(keys[83]){
-        players[0].y += 1
+        players[0].y += players[0].downwardsSpeed;
     }
 
     if(keys[38]){
-        players[1].y -= 1
+        players[1].y -= players[1].upwardsSpeed;
     }
     if(keys[40]){
-        players[1].y += 1
+        players[1].y += players[1].downwardsSpeed;
     }
 }
-
+function destroyBall(){
+    balls.splice(0, 1);
+    setTimeout(spawnNewBall, 3000);
+}
+function spawnNewBall(){
+    balls.push(new Ball(400, 300, 10, 10));
+}
 function checkCollisions(ob, arr, type){
     switch (type) {
         case "ballWallCollision":
             for (let i = 0; i < arr.length; i++) {
                 //x collision
                 if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x){
-                    ob.xDir *= -1;
-                }
-                //y collision
-                if(ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y){
+                    destroyBall();
+                }else if(ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y){ //y collision
                     ob.yDir *= -1;
                 }
+                
+                
             } 
             break;
-        case "playerCollision":
+        case "playerBallCollision":
             for (let i = 0; i < arr.length; i++) {        
                 //x collision
                 if(ob.x + ob.width >= arr[i].x && ob.x <= arr[i].x + arr[i].width && ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y + arr[i].height){
@@ -146,7 +160,25 @@ function checkCollisions(ob, arr, type){
             } 
             break;
         case "playerWallCollision":
-
+                for (let i = 0; i < walls.length; i++) {
+                    if(ob.x <= arr[i].x + arr[i].xLength && ob.x + ob.width >= arr[i].x){
+                        //wall collision
+                        if(ob.y <= arr[i].y + arr[i].yLength && ob.y + ob.height >= arr[i].y ){
+                            colliding = true;
+                            if(arr[i] === arr[0]){
+                                ob.y = arr[i].y + arr[i].yLength +1;
+                                ob.upwardsSpeed = 0;
+                            }
+                            if(arr[i] === arr[1]){
+                                ob.y = arr[i].y - ob.height;
+                                ob.downwardsSpeed = 0;
+                            }
+                        }else{
+                            ob.downwardsSpeed = 1;
+                            ob.upwardsSpeed = 1;
+                        }
+                    }
+                }
             break;
     }
       
