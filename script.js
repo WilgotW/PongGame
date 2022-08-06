@@ -7,7 +7,7 @@ window.addEventListener('resize', function(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
-
+let ballSpeedMultipliar = 1;
 let keys = [];
 let walls = [];
 let players = [];
@@ -46,18 +46,19 @@ class Ball {
         this.width = width;
         this.height = height;
         this.xSpeed = 1;
-        this.ySpeed = 1 ;
+        this.ySpeed = 1;
+        
 
-        this.xDir = 1.5;
-        this.yDir = 1.5;
+        this.xDir = 1;
+        this.yDir = 1;
     }
     draw(){
         c.fillStyle = "white";
         c.fillRect(this.x, this.y, this.width, this.height);
     }
     move(){
-        this.x += this.xSpeed * this.xDir;
-        this.y += this.ySpeed * this.yDir;
+        this.x += this.xSpeed * this.xDir * ballSpeedMultipliar;
+        this.y += this.ySpeed * this.yDir * ballSpeedMultipliar;
     }
 }
 
@@ -90,10 +91,11 @@ function update(){
         checkCollisions(balls[0], players, "playerBallCollision");
         checkCollisions(balls[0], walls, "ballWallCollision");
     }
-    
 
     checkCollisions(players[0], walls, "playerWallCollision");
     checkCollisions(players[1], walls, "playerWallCollision");
+
+    
 
     keyboardInputs()
     requestAnimationFrame(update);
@@ -132,11 +134,23 @@ function keyboardInputs(){
 }
 function destroyBall(){
     balls.splice(0, 1);
-    setTimeout(spawnNewBall, 3000);
-}
-function spawnNewBall(){
+    ballSpeedMultipliar = 0;
     balls.push(new Ball(400, 300, 10, 10));
+    setTimeout(newRound, 3000);
 }
+function newRound(){
+    ballSpeedMultipliar = 1;
+    
+    let random = randomNum(-1, 1);
+    if(random == 0){random = 1}
+    balls[0].xDir = random;
+    random = randomNum(-1, 1);
+    if(random == 0){random = 1}
+    balls[0].yDir = random;
+}
+
+let randomNum = (min, max) => {return Math.floor(Math.random()*(max-min+1))+min;}
+
 function checkCollisions(ob, arr, type){
     switch (type) {
         case "ballWallCollision":
@@ -146,9 +160,8 @@ function checkCollisions(ob, arr, type){
                     destroyBall();
                 }else if(ob.y + ob.height >= arr[i].y && ob.y <= arr[i].y){ //y collision
                     ob.yDir *= -1;
+                    ballSpeedMultipliar < 1.75 && (ballSpeedMultipliar += 0.01);
                 }
-                
-                
             } 
             break;
         case "playerBallCollision":
