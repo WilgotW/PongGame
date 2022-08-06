@@ -4,19 +4,61 @@ const c = canvas.getContext('2d');
 canvas.width = 825;
 canvas.height = 650;
 
-const playerVsPlayerBtn = document.getElementById("playerVSplayer");
-playerVsPlayerBtn.addEventListener('click', function(){
-    startGame();
-});
+//menu buttons
 
+// let okok = document.getElementsByClassName('okok');
+// for (let i = 0; i < okok.length; i++) {
+//     okok[i].innerHTML = "ghe"
+// }
+
+let menuBtns;
+    menuBtns = document.document.querySelectorAll('.menuButton');
+    console.log(menuBtns.length);
+
+// for(let i = 0; i < menuBtns.length; i++){
+//     menuBtns[i].addEventListener('click', function(){
+//         reloadPage();
+//     })
+// }
+// menuBtns.forEach(btn => {
+//     btn.innerHTML = "hhh";
+// });
+
+
+function reloadPage(){
+    location.reload();
+}
+
+
+const playerVsPlayerBtn = document.getElementById("playerVSplayer");
+
+//player game modes:
+const classicBtn = document.getElementById("classicMode");
+
+classicBtn.addEventListener('click', function(){startGame()});
+
+//scene blocks
 document.getElementById("GameWindow").style.display = "none";
 document.getElementById("GameMenu").style.display = "block";
+
+document.getElementById("Oponents").style.display = "Block";
+document.getElementById("gameModes").style.display = "none";
+
+//restart
+
+
+//player vs player
+playerVsPlayerBtn.addEventListener('click', function(){
+    document.getElementById("Oponents").style.display = "none";
+    document.getElementById("gameModes").style.display = "block";
+});
+
+
 function startGame(){
     document.getElementById("GameMenu").style.display = "none";
     document.getElementById("GameWindow").style.display = "block";
     newBall();
 }
-
 
 const player1score = document.getElementById("player1Score");
 const player2score = document.getElementById("player2Score");
