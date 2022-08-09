@@ -5,7 +5,9 @@ canvas.width = 825;
 canvas.height = 650;
 
 let freeze = 1;
-
+let playersAmount = 1;
+let aiSpeed = 9;
+let aiPrediction;
 let menuBtns = document.querySelectorAll('.menuButton');
 for(i = 0; i < menuBtns.length; i++){
     menuBtns[i].addEventListener('click', reloadPage);
@@ -20,8 +22,13 @@ const playerVsPlayerBtn = document.getElementById("playerVSplayer");
 const classicBtn = document.getElementById("classicMode");
 const timeBtn = document.getElementById("timeMode");
 const winText = document.getElementById("winText");
+const normalBtn = document.getElementById("normal");
+const hardBtn = document.getElementById("hard");
+
 classicBtn.addEventListener('click', function(){startGame("classic")});
-timeBtn.addEventListener('click', function(){startGame("time")})
+timeBtn.addEventListener('click', function(){startGame("time")});
+normalBtn.addEventListener('click', function(){startGame("AInormal")});
+hardBtn.addEventListener('click', function(){startGame("AIhard")});
 
 const timer = document.getElementById("time");
 
@@ -50,25 +57,46 @@ aiButton.addEventListener('click', function(){
 
 
 function startGame(gameMode){
+    document.getElementById("GameMenu").style.display = "none";
+    document.getElementById("GameWindow").style.display = "block";
     switch (gameMode) {
         case "classic":
-            document.getElementById("GameMenu").style.display = "none";
-            document.getElementById("GameWindow").style.display = "block";
+            playersAmount = 2;
             break;
         case "time":
-            document.getElementById("GameMenu").style.display = "none";
-            document.getElementById("GameWindow").style.display = "block";
+            playersAmount = 2;
+            document.getElementById("time").style.display = "block";
+            startTimer();
+            break;
+        case "AInormal":
+            playersAmount = 1;
+            aiSpeed = 9;
+            aiPrediction = 5;
+            document.getElementById("time").style.display = "block";
+            startTimer();
+            break;
+        case "AIhard":
+            playersAmount = 1;
+            aiSpeed = 6;
+            aiPrediction = 40;
             document.getElementById("time").style.display = "block";
             startTimer();
             break;
         default:
             break;
     }
-    
+    players.push(new Player(150, 300, 7, 30));
+    if(playersAmount == 2){players.push(new Player(650, 300, 7, 30));}else{
+        players.push(new AI(650, 300, 7, 30, 40));
+    }
+    if(playersAmount == 1){
+        setInterval(moveAI, aiSpeed);
+    }
     newBall();
+    update();
 }
 
-let startTimeMinutes = 1;
+let startTimeMinutes = 3;
 let timeInSeconds = 0;
 let timeInterval;
 function startTimer(){
@@ -131,6 +159,7 @@ class Wall {
         c.fillRect(this.x, this.y, this.xLength, this.yLength);
     }
 }
+
 class Player {
     constructor(x, y, width, height){
         this.x = x;
@@ -168,13 +197,54 @@ class Ball {
         this.y += this.ySpeed * this.yDir * ballSpeedMultipliar * freeze;
     }
 }
+class AI {
+    constructor(x, y, width, height, predict){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.upwardsSpeed = 1;
+        this.downwardsSpeed = 1;
+        this.colliding = false;
+
+        this.yDir = 0;
+        this.predict = aiPrediction;
+    }
+    draw(){
+        c.fillStyle = "white";
+        c.fillRect(this.x, this.y, this.width, this.height);
+    }
+    move(){
+        //move towards ball y:
+        if(balls[0].xDir > 0){
+            if(balls[0].x > canvas.width*(3/4)){
+                if(balls[0].y > this.y && balls[0].yDir == 1){
+                    //move down:
+                    this.y += this.downwardsSpeed * freeze;
+                }else if(balls[0].y < this.y && balls[0].yDir == -1){
+                    //move up:
+                    this.y -= this.upwardsSpeed * freeze;
+                }
+            }else{
+                if(balls[0].y + this.predict*ballSpeedMultipliar > this.y && balls[0].yDir == 1){
+                    //move down:
+                    this.y += this.downwardsSpeed * freeze;
+                }else if(balls[0].y - this.predict*ballSpeedMultipliar < this.y && balls[0].yDir == -1){
+                    //move up:
+                    this.y -= this.upwardsSpeed * freeze;
+                }
+            }
+            
+        }
+    }
+}
+
 walls.push(new Wall(100, 100, 600, 2));
 walls.push(new Wall(100, 500, 600, 2));
 walls.push(new Wall(100, 100, 2, 400));
 walls.push(new Wall(700, 100, 2, 402));
 
-players.push(new Player(150, 300, 7, 30));
-players.push(new Player(650, 300, 7, 30));
+
 
 function update(){
     refrech();
@@ -183,6 +253,7 @@ function update(){
     });
     players.forEach(player => {
         player.draw();
+        
     });
     balls.forEach(ball => {
         ball.draw();
@@ -194,11 +265,14 @@ function update(){
     }
     checkCollisions(players[0], walls, "playerWallCollision");
     checkCollisions(players[1], walls, "playerWallCollision");
+    
     keyboardInputs()
     requestAnimationFrame(update);
 }
-update();
 
+function moveAI(){
+    players[1].move();
+}
 function refrech(){
     c.fillStyle = "rgba(0, 0, 0, 0.3)"
     c.fillRect(0, 0, canvas.width, canvas.height);
@@ -211,24 +285,30 @@ document.addEventListener('keydown', function(event) {
 document.addEventListener('keyup', function(event){
     keys[event.keyCode] = false;
 });
+let e = 0;
 function keyboardInputs(){
     //w
     if(keys[87]){
+        
         players[0].y -= players[0].upwardsSpeed * freeze;
     }
     //s
     if(keys[83]){
         players[0].y += players[0].downwardsSpeed * freeze;
     }
-    //up
-    if(keys[38]){
-        players[1].y -= players[1].upwardsSpeed * freeze;
-    }
-    //down
-    if(keys[40]){
-        players[1].y += players[1].downwardsSpeed * freeze;
+    
+    if(playersAmount == 2){
+        //up
+        if(keys[38]){
+            players[1].y -= players[1].upwardsSpeed * freeze;
+        }
+        //down
+        if(keys[40]){
+            players[1].y += players[1].downwardsSpeed * freeze;
+        }
     }
 }
+    
 
 function newBall(){
     spawningBall = true;
