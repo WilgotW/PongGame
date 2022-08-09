@@ -13,39 +13,83 @@ function reloadPage(){
     location.reload();
 }
 
-
+const aiButton = document.getElementById("playerVSai");
 const playerVsPlayerBtn = document.getElementById("playerVSplayer");
-
-//player game modes:
 const classicBtn = document.getElementById("classicMode");
+const timeBtn = document.getElementById("timeMode");
+classicBtn.addEventListener('click', function(){startGame("classic")});
+timeBtn.addEventListener('click', function(){startGame("time")})
 
-classicBtn.addEventListener('click', function(){startGame()});
+const timer = document.getElementById("time");
 
 //scene blocks
-document.getElementById("GameWindow").style.display = "none";
+//start showing
 document.getElementById("GameMenu").style.display = "block";
-
-document.getElementById("Oponents").style.display = "Block";
+document.getElementById("Oponents").style.display = "block";
+//after activated
+document.getElementById("GameWindow").style.display = "none";
 document.getElementById("gameModes").style.display = "none";
+document.getElementById("AIdif").style.display = "none";
+document.getElementById("time").style.display = "none";
 
-//restart
 
 
 //player vs player
 playerVsPlayerBtn.addEventListener('click', function(){
-    
-
     document.getElementById("Oponents").style.display = "none";
     document.getElementById("gameModes").style.display = "block";
-
-    
+});
+//player vs ai
+aiButton.addEventListener('click', function(){
+    document.getElementById("Oponents").style.display = "none";
+    document.getElementById("AIdif").style.display = "block";
 });
 
 
-function startGame(){
-    document.getElementById("GameMenu").style.display = "none";
-    document.getElementById("GameWindow").style.display = "block";
+function startGame(gameMode){
+    switch (gameMode) {
+        case "classic":
+            document.getElementById("GameMenu").style.display = "none";
+            document.getElementById("GameWindow").style.display = "block";
+            break;
+        case "time":
+            document.getElementById("GameMenu").style.display = "none";
+            document.getElementById("GameWindow").style.display = "block";
+            document.getElementById("time").style.display = "block";
+            startTimer();
+            break;
+        default:
+            break;
+    }
+    
     newBall();
+}
+
+let startTimeMinutes = 1;
+let timeInSeconds = 0;
+let timeInterval;
+function startTimer(){
+    timer.innerHTML = startTimeMinutes + ":0" + timeInSeconds;
+    timeInterval = setInterval(countDown, 1000);
+}  
+function countDown(){
+    if(timeInSeconds == 0){
+        startTimeMinutes--;
+        timeInSeconds = 60;
+    }
+    timeInSeconds--;
+    if(timeInSeconds < 10){
+        timer.innerHTML = startTimeMinutes + ":0" + timeInSeconds;
+    }else{
+        timer.innerHTML = startTimeMinutes + ":" + timeInSeconds;
+    }
+    if(startTimeMinutes < 1){
+        timer.style.color = "red";
+        timer.style.fontSize = "40px";
+    }
+    if(startTimeMinutes <= 0 && timeInSeconds <= 0){
+        clearInterval(timeInterval);
+    }
 }
 
 const player1score = document.getElementById("player1Score");

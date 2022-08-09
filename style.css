@@ -3,12 +3,30 @@ body{
     padding: 0;
     margin: 0;
 }
+html::-webkit-scrollbar {
+    width: 0px;
+}
 canvas{
     margin: 0;
     padding: 0;
     background: black;
 }
-
+#timeDiv{
+    
+    margin: 0;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+}
+#time{
+    transition: 0.5s;
+    position: absolute;
+    font-family: 'Kanit', sans-serif;
+    font-size: 35px;
+    color: aliceblue;
+    margin: 0;
+    padding: 0;
+}
 #GameMenu{
     min-width: 737px;
     width: 100%;
@@ -21,7 +39,6 @@ canvas{
     width: 20%;
 }
 #title{
-    
     margin-bottom: 10px;
     font-family: 'Kanit', sans-serif;
     font-size: 50px;
@@ -41,6 +58,8 @@ canvas{
 }
 
 .customButton{
+    /* max-width: 233px;
+    max-height: 48px; */
     text-align: center;
     margin: 10px;
     user-select: none;

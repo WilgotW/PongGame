@@ -17,7 +17,7 @@
             <img src="/images/pingpongLogo.png" alt="" id="logo">
         </div>
         <div class="center">
-            <div id="title">Ping Pong</div>
+            <div id="title">Pong Game!</div>
         </div>
         <div class="center">
             <div id="Oponents" class="grid"> 
@@ -29,6 +29,11 @@
                 <div unselectable="on" href="" class="customButton" id="classicMode">Classic</div>
                 <div unselectable="on" href="" class="customButton" id="timeMode">Time</div>
             </div>
+            <div id="AIdif" class="grid">
+                <div unselectable="on" href="" class="customButton menuButton">Back</div>    
+                <div unselectable="on" href="" class="customButton" id="">Normal</div>
+                <div unselectable="on" href="" class="customButton" id="">Hard</div>
+            </div>
         </div>
     </div>
     <div id="GameWindow">
@@ -36,6 +41,9 @@
             <div id="player1Score" class="score">0</div>
             <p> - </p>
             <div id="player2Score"class="score">0</div>
+        </div>
+        <div id="timeDiv">
+            <div id="time"></div>
         </div>
         <div class="center">
             <canvas></canvas>
