@@ -4,23 +4,6 @@ const c = canvas.getContext('2d');
 canvas.width = 825;
 canvas.height = 650;
 
-//menu buttons
-
-// let okok = document.getElementsByClassName('okok');
-// for (let i = 0; i < okok.length; i++) {
-//     okok[i].innerHTML = "ghe"
-// }
-
-
-// for(let i = 0; i < menuBtns.length; i++){
-//     menuBtns[i].addEventListener('click', function(){
-//         reloadPage();
-//     })
-// }
-// menuBtns.forEach(btn => {
-//     btn.innerHTML = "hhh";
-// });
-
 let menuBtns = document.querySelectorAll('.menuButton');
 for(i = 0; i < menuBtns.length; i++){
     menuBtns[i].addEventListener('click', reloadPage);

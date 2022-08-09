@@ -8,18 +8,20 @@ canvas{
     padding: 0;
     background: black;
 }
-.okok{
-    color: white;
-    font-size: 100px;
-}
+
 #GameMenu{
+    min-width: 737px;
+    width: 100%;
     position: absolute;
 }
 #logo{
+    max-width: 205px;
+    max-height: 181px;
     margin-top: 10%;
     width: 20%;
 }
 #title{
+    
     margin-bottom: 10px;
     font-family: 'Kanit', sans-serif;
     font-size: 50px;
@@ -27,24 +29,22 @@ canvas{
     transition: 1s;
 }
 
-#shrink{
+.shrink{
     margin: 0;
     padding: 0;
     width: 10%;
 }
 .grid{
-    display: grid;
+    display: inline-block;
+    width: 25%;
     place-items: center;
-    width: 100%;
-    align-items: center;
-    
 }
 
 .customButton{
+    text-align: center;
     margin: 10px;
-    width: 100%;
     user-select: none;
-    padding: 10px;
+    padding: 7px;
     border: 2px solid white;
     font-family: 'Kanit', sans-serif;
     font-size: 20px;
@@ -59,9 +59,8 @@ canvas{
 }
 
 .center{
-    text-align: center;
-    align-items: center;
     display: flex;
+    align-items: center;
     justify-content: center;
 }
 .score{
