@@ -11,9 +11,6 @@ canvas.height = 650;
 //     okok[i].innerHTML = "ghe"
 // }
 
-let menuBtns;
-    menuBtns = document.document.querySelectorAll('.menuButton');
-    console.log(menuBtns.length);
 
 // for(let i = 0; i < menuBtns.length; i++){
 //     menuBtns[i].addEventListener('click', function(){
@@ -24,6 +21,10 @@ let menuBtns;
 //     btn.innerHTML = "hhh";
 // });
 
+let menuBtns = document.querySelectorAll('.menuButton');
+for(i = 0; i < menuBtns.length; i++){
+    menuBtns[i].addEventListener('click', reloadPage);
+}
 
 function reloadPage(){
     location.reload();
@@ -49,8 +50,12 @@ document.getElementById("gameModes").style.display = "none";
 
 //player vs player
 playerVsPlayerBtn.addEventListener('click', function(){
+    
+
     document.getElementById("Oponents").style.display = "none";
     document.getElementById("gameModes").style.display = "block";
+
+    
 });
 
 
