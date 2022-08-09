@@ -4,6 +4,8 @@ const c = canvas.getContext('2d');
 canvas.width = 825;
 canvas.height = 650;
 
+let freeze = 1;
+
 let menuBtns = document.querySelectorAll('.menuButton');
 for(i = 0; i < menuBtns.length; i++){
     menuBtns[i].addEventListener('click', reloadPage);
@@ -17,6 +19,7 @@ const aiButton = document.getElementById("playerVSai");
 const playerVsPlayerBtn = document.getElementById("playerVSplayer");
 const classicBtn = document.getElementById("classicMode");
 const timeBtn = document.getElementById("timeMode");
+const winText = document.getElementById("winText");
 classicBtn.addEventListener('click', function(){startGame("classic")});
 timeBtn.addEventListener('click', function(){startGame("time")})
 
@@ -31,7 +34,7 @@ document.getElementById("GameWindow").style.display = "none";
 document.getElementById("gameModes").style.display = "none";
 document.getElementById("AIdif").style.display = "none";
 document.getElementById("time").style.display = "none";
-
+winText.style.display = "none";
 
 
 //player vs player
@@ -78,18 +81,30 @@ function countDown(){
         timeInSeconds = 60;
     }
     timeInSeconds--;
-    if(timeInSeconds < 10){
-        timer.innerHTML = startTimeMinutes + ":0" + timeInSeconds;
-    }else{
-        timer.innerHTML = startTimeMinutes + ":" + timeInSeconds;
-    }
+    timeInSeconds < 10 ? timer.innerHTML = startTimeMinutes + ":0" + timeInSeconds : timer.innerHTML = startTimeMinutes + ":" + timeInSeconds;
+    
     if(startTimeMinutes < 1){
         timer.style.color = "red";
         timer.style.fontSize = "40px";
     }
     if(startTimeMinutes <= 0 && timeInSeconds <= 0){
         clearInterval(timeInterval);
+        win();
     }
+}
+
+function win() {
+    if(player1ScoreText > player2ScoreText){
+        winText.innerHTML = "PLAYER 1 WIN";
+    }else if(player2ScoreText > player1ScoreText){
+        winText.innerHTML = "PLAYER 2 WIN";
+    }else{
+        winText.innerHTML = "DRAW";
+    }
+    winText.style.display = "block";
+
+    //Freeze:
+    freeze = 0;
 }
 
 const player1score = document.getElementById("player1Score");
@@ -149,8 +164,8 @@ class Ball {
         c.fillRect(this.x, this.y, this.width, this.height);
     }
     move(){
-        this.x += this.xSpeed * this.xDir * ballSpeedMultipliar;
-        this.y += this.ySpeed * this.yDir * ballSpeedMultipliar;
+        this.x += this.xSpeed * this.xDir * ballSpeedMultipliar * freeze;
+        this.y += this.ySpeed * this.yDir * ballSpeedMultipliar * freeze;
     }
 }
 walls.push(new Wall(100, 100, 600, 2));
@@ -199,19 +214,19 @@ document.addEventListener('keyup', function(event){
 function keyboardInputs(){
     //w
     if(keys[87]){
-        players[0].y -= players[0].upwardsSpeed;
+        players[0].y -= players[0].upwardsSpeed * freeze;
     }
     //s
     if(keys[83]){
-        players[0].y += players[0].downwardsSpeed;
+        players[0].y += players[0].downwardsSpeed * freeze;
     }
     //up
     if(keys[38]){
-        players[1].y -= players[1].upwardsSpeed;
+        players[1].y -= players[1].upwardsSpeed * freeze;
     }
     //down
     if(keys[40]){
-        players[1].y += players[1].downwardsSpeed;
+        players[1].y += players[1].downwardsSpeed * freeze;
     }
 }
 

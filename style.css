@@ -11,6 +11,24 @@ canvas{
     padding: 0;
     background: black;
 }
+#winDiv{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    height: 80vh;
+    position: absolute;
+    left: 50%;
+}
+#winText{
+    transition: 0.5s;
+    position: relative;
+    left: -50%;
+    font-family: 'Kanit', sans-serif;
+    font-size: 50px;
+    color: aliceblue;
+    
+}
 #timeDiv{
     
     margin: 0;
