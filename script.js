@@ -217,19 +217,19 @@ class AI {
     move(){
         //move towards ball y:
         if(balls[0].xDir > 0){
-            if(balls[0].x > canvas.width*(3/4)){
-                if(balls[0].y > this.y && balls[0].yDir == 1){
+            if(balls[0].x > canvas.width*(2/3)){
+                if(balls[0].y + balls[0].height/2 > this.y && balls[0].yDir == 1){
                     //move down:
                     this.y += this.downwardsSpeed * freeze;
-                }else if(balls[0].y < this.y && balls[0].yDir == -1){
+                }else if(balls[0].y + balls[0].height/2 < this.y && balls[0].yDir == -1){
                     //move up:
                     this.y -= this.upwardsSpeed * freeze;
                 }
             }else{
-                if(balls[0].y + this.predict*ballSpeedMultipliar > this.y && balls[0].yDir == 1){
+                if(balls[0].y + balls[0].height/2 + this.predict*ballSpeedMultipliar > this.y && balls[0].yDir == 1){
                     //move down:
                     this.y += this.downwardsSpeed * freeze;
-                }else if(balls[0].y - this.predict*ballSpeedMultipliar < this.y && balls[0].yDir == -1){
+                }else if(balls[0].y + balls[0].height/2 - this.predict*ballSpeedMultipliar < this.y && balls[0].yDir == -1){
                     //move up:
                     this.y -= this.upwardsSpeed * freeze;
                 }
@@ -320,8 +320,8 @@ function newBall(){
     setTimeout(newRound, 4000);    
 }
 function newRound(){
+    ballSpeedMultipliar = 1;
     spawningBall = false;
-    ballSpeedMultipliar = 0.75;
     let random = randomNum(-1, 1);
     if(random == 0){random = -1}
     balls[0].xDir = random;
